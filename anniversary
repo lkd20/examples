@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统升级中...</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ff41; /* 黑客帝国绿，或者换成粉色 #ff69b4 */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #container { text-align: center; width: 80%; }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #00ff41; /* 进度条颜色 */
+            width: 0%;
+            transition: width 0.5s;
+        }
+        #log {
+            height: 100px;
+            overflow: hidden;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        #final-message {
+            display: none;
+            font-size: 24px;
+            color: white;
+        }
+        button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1 id="title">正在加载 LoveOS v1.0...</h1>
+    <div id="log">正在初始化...</div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="fill"></div>
+    </div>
+    <h2 id="percent">0%</h2>
+
+    <div id="final-message">
+        <p>❤️ 999天试用期完美结束 ❤️</p>
+        <p>检测到核心用户：[女朋友名字]</p>
+        <p>系统请求开启“一辈子”模式</p>
+        <button onclick="alert('续费成功！期限：永远。爱你！')">同意续费</button>
+    </div>
+</div>
+
+<script>
+    // 这里修改你们的回忆
+    const memories = [
+        "正在加载 2023年X月X日 的第一次见面...",
+        "正在同步 那次去海边的记忆...",
+        "正在缓存 你最爱吃的火锅...",
+        "正在修复 惹你生气的小Bug...",
+        "正在优化 拥抱的温暖度...",
+        "正在计算 999天的思念...",
+        "正在渲染 未来的幸福画面..."
+    ];
+
+    let progress = 0;
+    const fill = document.getElementById('fill');
+    const percent = document.getElementById('percent');
+    const log = document.getElementById('log');
+    const title = document.getElementById('title');
+    const container = document.getElementById('container');
+    const finalMsg = document.getElementById('final-message');
+
+    let memoryIndex = 0;
+
+    function updateProgress() {
+        // 模拟进度增加，越后面越慢
+        let increment = Math.random() * 5; 
+        if(progress > 80) increment = 0.5;
+        if(progress > 95) increment = 0.1;
+        
+        progress += increment;
+
+        // 更新日志
+        if (Math.random() > 0.7 && memoryIndex < memories.length) {
+            log.innerHTML = memories[memoryIndex] + "<br>" + log.innerHTML;
+            memoryIndex++;
+        }
+
+        if (progress >= 99.9 && progress < 100) {
+            // 停在 99.9% 一小会儿，制造悬念
+            progress = 99.9;
+            percent.innerText = "99.9%";
+            fill.style.width = "99.9%";
+            setTimeout(finish, 2000);
+            return;
+        }
+
+        if (progress >= 100) {
+            finish();
+            return;
+        }
+
+        fill.style.width = progress + "%";
+        percent.innerText = progress.toFixed(1) + "%";
+        
+        requestAnimationFrame(updateProgress);
+    }
+
+    function finish() {
+        fill.style.width = "100%";
+        percent.innerText = "100%";
+        log.style.display = 'none';
+        document.querySelector('.progress-bar').style.display = 'none';
+        title.innerText = "加载完成！";
+        finalMsg.style.display = 'block';
+    }
+
+    // 点击页面开始加载（为了兼容手机浏览器自动播放音频策略，最好让用户先点一下）
+    document.body.onclick = function() {
+        if(progress === 0) {
+            updateProgress();
+            // 如果你有背景音乐，可以在这里 play()
+        }
+    };
+</script>
+</body>
+</html>
